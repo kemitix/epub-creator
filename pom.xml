@@ -9,7 +9,7 @@
         <relativePath/>
     </parent>
 
-    <groupId>coza.opencollab.epub</groupId>
+    <groupId>net.kemitix</groupId>
     <artifactId>epub-creator</artifactId>
     <version>1.0.2</version>
     
