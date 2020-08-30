@@ -1,22 +1,32 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <artifactId>kemitix-parent</artifactId>
+        <groupId>net.kemitix</groupId>
+        <version>5.3.0</version>
+        <relativePath/>
+    </parent>
+
     <groupId>coza.opencollab.epub</groupId>
     <artifactId>epub-creator</artifactId>
-    <version>1.0.2-SNAPSHOT</version>
-    <packaging>jar</packaging>
+    <version>1.0.2</version>
     
     <scm>
-        <connection>scm:git:git@github.com:OpenCollabZA/epub-creator.git</connection>
-        <url>scm:git:git@github.com:OpenCollabZA/epub-creator.git</url>
-        <developerConnection>scm:git:git@github.com:OpenCollabZA/epub-creator.git</developerConnection>
-      <tag>HEAD</tag>
-  </scm>
+        <connection>scm:git:git@github.com:kemitix/epub-creator.git</connection>
+        <url>scm:git:git@github.com:kemitix/epub-creator.git</url>
+        <developerConnection>scm:git:git@github.com:kemitix/epub-creator.git</developerConnection>
+        <tag>HEAD</tag>
+    </scm>
     
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <maven.compiler.source>1.7</maven.compiler.source>
-        <maven.compiler.target>1.7</maven.compiler.target>
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
+
+        <tiles-maven-plugin.version>2.13</tiles-maven-plugin.version>
+        <kemitix-tiles.version>2.8.0</kemitix-tiles.version>
     </properties>
     
     <dependencies>
@@ -47,51 +57,24 @@
     <build>
         <plugins>
             <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-release-plugin</artifactId>
-                <version>2.5.3</version>
+                <groupId>io.repaint.maven</groupId>
+                <artifactId>tiles-maven-plugin</artifactId>
+                <version>${tiles-maven-plugin.version}</version>
+                <extensions>true</extensions>
+                <configuration>
+                    <tiles>
+                        <tile>net.kemitix.tiles:maven-plugins:${kemitix-tiles.version}</tile>
+                        <tile>net.kemitix.tiles:enforcer:${kemitix-tiles.version}</tile>
+                        <tile>net.kemitix.tiles:compiler-jdk-8:${kemitix-tiles.version}</tile>
+<!--                        <tile>net.kemitix.tiles:huntbugs:${kemitix-tiles.version}</tile>-->
+<!--                        <tile>net.kemitix.tiles:pmd:${kemitix-tiles.version}</tile>-->
+                        <tile>net.kemitix.tiles:testing:${kemitix-tiles.version}</tile>
+<!--                        <tile>net.kemitix.tiles:coverage:${kemitix-tiles.version}</tile>-->
+<!--                        <tile>net.kemitix.tiles:pitest:${kemitix-tiles.version}</tile>-->
+                    </tiles>
+                </configuration>
             </plugin>
         </plugins>
     </build>
-    
-    <distributionManagement>
-        <repository>
-            <id>opencollab-maven-public-releases</id>
-            <name>OPENCOLLAB public releases repository</name>
-            <url>https://nexus3.opencollab.co.za/repository/opencollab-maven-public-releases</url>
-        </repository>
-        <snapshotRepository>
-            <id>opencollab-maven-public-snapshots</id>
-            <name>OPENCOLLAB public snaphots repository</name>
-            <url>https://nexus3.opencollab.co.za/repository/opencollab-maven-public-snapshots</url>
-        </snapshotRepository>
-    </distributionManagement>
-    <profiles>
-   <profile>
-      <id>releases</id>
-      <build>
-         <plugins>
-            <plugin>
-               <groupId>org.sonatype.plugins</groupId>
-               <artifactId>nexus-staging-maven-plugin</artifactId>
-               <version>1.5.1</version>
-               <executions>
-                  <execution>
-                     <id>default-deploy</id>
-                     <phase>deploy</phase>
-                     <goals>
-                        <goal>deploy</goal>
-                     </goals>
-                  </execution>
-               </executions>
-               <configuration>
-                  <serverId>nexus-releases</serverId>
-                  <nexusUrl>https://nexus3.opencollab.co.za/repository/opencollab-maven-public-releases</nexusUrl>
-                  <skipStaging>true</skipStaging>
-               </configuration>
-            </plugin>
-         </plugins>
-      </build>
-   </profile>
-</profiles>
+
 </project>

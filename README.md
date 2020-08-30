@@ -1,5 +1,16 @@
 # epub-creator
-[![epub-creator version](https://img.shields.io/badge/epub--creator-v1.0.0-green.svg?style=flat)](http://semver.org) [![WTFPL license](http://img.shields.io/badge/License-MIT-blue.svg)](http://opensource.org/licenses/MIT) [![Build Status](https://travis-ci.org/OpenCollabZA/epub-creator.svg)](https://travis-ci.org/OpenCollabZA/epub-creator) [![Coverity Scan Build Status](https://scan.coverity.com/projects/8384/badge.svg)](https://scan.coverity.com/projects/opencollabza-epub-creator)
+
+![GitHub release (latest by date)](
+https://img.shields.io/github/v/release/kemitix/epub-creator?style=for-the-badge)
+![GitHub Release Date](
+https://img.shields.io/github/release-date/kemitix/epub-creator?style=for-the-badge)
+
+[![Nexus](
+https://img.shields.io/nexus/r/https/oss.sonatype.org/net.kemitix/epub-creator.svg?style=for-the-badge)](
+https://oss.sonatype.org/content/repositories/releases/net/kemitix/epub-creator/)
+[![Maven-Central](
+https://img.shields.io/maven-central/v/net.kemitix/epub-creator.svg?style=for-the-badge)](
+https://search.maven.org/search?q=g:net.kemitix%20a:epub-creator)
 
 # Java EPUB3 creator API
 
@@ -16,7 +27,7 @@ Create EPUB3 standard ebooks.
 
 You will need
 
-1. [Java 7+](http://www.oracle.com/technetwork/java/javase/downloads/jdk7-downloads-1880260.html)
+1. Java 8+
 2. [Maven 3+](https://maven.apache.org/download.cgi)
 
 ```
