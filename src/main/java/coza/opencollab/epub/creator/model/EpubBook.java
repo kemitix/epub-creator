@@ -426,4 +426,13 @@ public class EpubBook {
         return uniqueHrefs;
     }
 
+    public void addMetadata(String element, String value) {
+        getEpubCreator().getOpfCreator()
+                .addMetadata(element, value);
+    }
+
+    public void addMetaProperty(String property, String refines, String value) {
+        getEpubCreator().getOpfCreator()
+                .addMetadataProperty(property, refines, value);
+    }
 }

@@ -24,14 +24,21 @@ import coza.opencollab.epub.creator.EpubConstants;
 import coza.opencollab.epub.creator.api.OpfCreator;
 import coza.opencollab.epub.creator.model.Content;
 import coza.opencollab.epub.creator.model.EpubBook;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
 import org.htmlcleaner.CleanerProperties;
 import org.htmlcleaner.ContentNode;
 import org.htmlcleaner.HtmlCleaner;
 import org.htmlcleaner.PrettyXmlSerializer;
 import org.htmlcleaner.Serializer;
 import org.htmlcleaner.TagNode;
+
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Default implementation of the OpfCreator. This follows EPUB3 standards to
@@ -57,6 +64,9 @@ public class OpfCreatorDefault implements OpfCreator {
      */
     private final Serializer htmlSetdown;
 
+    private final Map<String, String> metadata = new HashMap<>();
+    private final List<MetaProperty> metaProperties = new ArrayList<>();
+
     public OpfCreatorDefault() {
         cleaner = new HtmlCleaner();
         CleanerProperties htmlProperties = cleaner.getProperties();
@@ -64,6 +74,16 @@ public class OpfCreatorDefault implements OpfCreator {
         htmlProperties.setAdvancedXmlEscape(false);
         htmlProperties.setUseEmptyElementTags(true);
         htmlSetdown = new PrettyXmlSerializer(htmlProperties);
+    }
+
+    @Override
+    public void addMetadata(String element, String value) {
+        metadata.put(element, value);
+    }
+
+    @Override
+    public void addMetadataProperty(String property, String refines, String value) {
+        metaProperties.add(MetaProperty.create(property, refines, value));
     }
 
     /**
@@ -95,6 +115,14 @@ public class OpfCreatorDefault implements OpfCreator {
             creatorNode.addChild(new ContentNode(book.getAuthor()));
             metaNode.addChild(creatorNode);
         }
+        metadata.forEach((key, value) -> addNodeData(metaNode, key, value));
+        metaProperties.forEach(metaProperty -> {
+            TagNode node = new TagNode("meta");
+            node.addAttribute("property", metaProperty.property);
+            node.addAttribute("refines", metaProperty.refines);
+            node.addChild(new ContentNode(metaProperty.value));
+            metaNode.addChild(node);
+        });
     }
 
     /**
@@ -199,4 +227,13 @@ public class OpfCreatorDefault implements OpfCreator {
         this.opfXML = opfXML;
     }
 
+    @AllArgsConstructor(access = AccessLevel.PRIVATE)
+    private static class MetaProperty {
+        private final String property;
+        private final String refines;
+        private final String value;
+        public static MetaProperty create(String property, String refines, String value) {
+            return new MetaProperty(property, refines, value);
+        }
+    }
 }

@@ -38,4 +38,7 @@ public interface OpfCreator {
      */
     public String createOpfString(EpubBook book);
 
+    void addMetadata(String element, String value);
+
+    void addMetadataProperty(String property, String refines, String value);
 }

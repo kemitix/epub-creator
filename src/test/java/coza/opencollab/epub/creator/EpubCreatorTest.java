@@ -18,6 +18,9 @@ public class EpubCreatorTest {
         try (FileOutputStream file = new FileOutputStream(new File("test.epub"))) {
             EpubBook book = new EpubBook("en", "Samuel .-__Id1", "Samuel Test Book", "Samuel Holtzkampf");
 
+            book.addMetadata("dc:creator", "Bob Smith");
+            book.addMetaProperty("role", "#editor-id", "Editor");
+
             book.addContent(this.getClass().getResourceAsStream("/epub30-overview.xhtml"),
                     "application/xhtml+xml", "xhtml/epub30-overview.xhtml", true, true).setId("Overview");
             book.addContent(this.getClass().getResourceAsStream("/idpflogo_web_125.jpg"),
