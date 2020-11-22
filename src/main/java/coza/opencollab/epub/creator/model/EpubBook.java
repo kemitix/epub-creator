@@ -21,6 +21,7 @@
 package coza.opencollab.epub.creator.model;
 
 import coza.opencollab.epub.creator.EpubConstants;
+import coza.opencollab.epub.creator.api.MetadataItem;
 import coza.opencollab.epub.creator.util.EpubWriter;
 import java.io.IOException;
 import java.io.InputStream;
@@ -426,13 +427,9 @@ public class EpubBook {
         return uniqueHrefs;
     }
 
-    public void addMetadata(String element, String value) {
+    public void addMetadata(MetadataItem metadataItem) {
         getEpubCreator().getOpfCreator()
-                .addMetadata(element, value);
+                .addMetadata(metadataItem);
     }
 
-    public void addMetaProperty(String property, String refines, String value) {
-        getEpubCreator().getOpfCreator()
-                .addMetadataProperty(property, refines, value);
-    }
 }

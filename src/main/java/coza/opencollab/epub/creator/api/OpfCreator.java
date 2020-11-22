@@ -30,6 +30,8 @@ import coza.opencollab.epub.creator.model.EpubBook;
  */
 public interface OpfCreator {
 
+    void addMetadata(MetadataItem metadataItem);
+
     /**
      * Creates the OPF file text from the EpubBook data
      *
@@ -38,7 +40,4 @@ public interface OpfCreator {
      */
     public String createOpfString(EpubBook book);
 
-    void addMetadata(String element, String value);
-
-    void addMetadataProperty(String property, String refines, String value);
 }

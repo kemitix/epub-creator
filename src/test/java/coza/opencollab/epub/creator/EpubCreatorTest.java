@@ -1,5 +1,6 @@
 package coza.opencollab.epub.creator;
 
+import coza.opencollab.epub.creator.api.MetadataItem;
 import coza.opencollab.epub.creator.model.EpubBook;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -18,8 +19,11 @@ public class EpubCreatorTest {
         try (FileOutputStream file = new FileOutputStream(new File("test.epub"))) {
             EpubBook book = new EpubBook("en", "Samuel .-__Id1", "Samuel Test Book", "Samuel Holtzkampf");
 
-            book.addMetadata("dc:creator", "Bob Smith");
-            book.addMetaProperty("role", "#editor-id", "Editor");
+            MetadataItem.Builder builder = MetadataItem.builder();
+            book.addMetadata(builder.name("dc:creator").value("Bob Smith"));
+            book.addMetadata(builder.name("meta")
+                    .property("role").refines("#editor-id")
+                    .value("Editor"));
 
             book.addContent(this.getClass().getResourceAsStream("/epub30-overview.xhtml"),
                     "application/xhtml+xml", "xhtml/epub30-overview.xhtml", true, true).setId("Overview");
