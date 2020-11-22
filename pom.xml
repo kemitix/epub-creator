@@ -11,7 +11,7 @@
 
     <groupId>net.kemitix</groupId>
     <artifactId>epub-creator</artifactId>
-    <version>1.0.2</version>
+    <version>1.1.0</version>
     
     <scm>
         <connection>scm:git:git@github.com:kemitix/epub-creator.git</connection>
@@ -51,7 +51,14 @@
             <artifactId>commons-collections</artifactId>
             <version>3.2.2</version>
         </dependency>
-        
+
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>1.18.16</version>
+            <optional>true</optional>
+        </dependency>
+
     </dependencies>
     
     <build>

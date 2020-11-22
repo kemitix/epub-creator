@@ -21,17 +21,21 @@
 package coza.opencollab.epub.creator.impl;
 
 import coza.opencollab.epub.creator.EpubConstants;
+import coza.opencollab.epub.creator.api.MetadataItem;
 import coza.opencollab.epub.creator.api.OpfCreator;
 import coza.opencollab.epub.creator.model.Content;
 import coza.opencollab.epub.creator.model.EpubBook;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import org.htmlcleaner.CleanerProperties;
 import org.htmlcleaner.ContentNode;
 import org.htmlcleaner.HtmlCleaner;
 import org.htmlcleaner.PrettyXmlSerializer;
 import org.htmlcleaner.Serializer;
 import org.htmlcleaner.TagNode;
+
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 /**
  * Default implementation of the OpfCreator. This follows EPUB3 standards to
@@ -57,6 +61,8 @@ public class OpfCreatorDefault implements OpfCreator {
      */
     private final Serializer htmlSetdown;
 
+    private final List<MetadataItem> metadataItems = new ArrayList<>();
+
     public OpfCreatorDefault() {
         cleaner = new HtmlCleaner();
         CleanerProperties htmlProperties = cleaner.getProperties();
@@ -64,6 +70,11 @@ public class OpfCreatorDefault implements OpfCreator {
         htmlProperties.setAdvancedXmlEscape(false);
         htmlProperties.setUseEmptyElementTags(true);
         htmlSetdown = new PrettyXmlSerializer(htmlProperties);
+    }
+
+    @Override
+    public void addMetadata(MetadataItem metadataItem) {
+        this.metadataItems.add(metadataItem);
     }
 
     /**
@@ -75,7 +86,28 @@ public class OpfCreatorDefault implements OpfCreator {
         addMetaDataTags(tagNode, book);
         addManifestTags(tagNode, book);
         addSpineTags(tagNode, book);
+        addCustomMetadata(tagNode, book);
         return htmlSetdown.getAsString(tagNode);
+    }
+
+    private void addCustomMetadata(TagNode tagNode, EpubBook book) {
+        TagNode metaNode = tagNode.findElementByName("metadata", true);
+        metadataItems.forEach(item -> {
+            TagNode node = new TagNode(item.getName());
+            if (item.hasId()) {
+                node.addAttribute("id", item.getId());
+            }
+            if (item.hasProperty()) {
+                node.addAttribute("property", item.getProperty());
+            }
+            if (item.hasRefines()) {
+                node.addAttribute("refines", item.getRefines());
+            }
+            if (item.hasValue()) {
+                node.addChild(new ContentNode(item.getValue()));
+            }
+            metaNode.addChild(node);
+        });
     }
 
     /**
