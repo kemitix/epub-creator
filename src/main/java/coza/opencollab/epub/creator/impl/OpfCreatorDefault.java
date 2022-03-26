@@ -36,6 +36,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Default implementation of the OpfCreator. This follows EPUB3 standards to
@@ -121,7 +122,18 @@ public class OpfCreatorDefault implements OpfCreator {
         addNodeData(metaNode, "dc:identifier", book.getId());
         addNodeData(metaNode, "dc:title", book.getTitle());
         addNodeData(metaNode, "dc:language", book.getLanguage());
-        addNodeData(metaNode, "meta", new SimpleDateFormat("yyyy-MM-dd'T'hh:mm:ss'Z'").format(new Date()));
+        Optional<MetadataItem> customModifiedValue = metadataItems.stream()
+                .filter(MetadataItem::hasValue)
+                .filter(MetadataItem::hasProperty)
+                .filter(item -> item.getProperty().equals("dcterms:modified"))
+                .findFirst();
+        if (customModifiedValue.isPresent()) {
+            MetadataItem item = customModifiedValue.get();
+            addNodeData(metaNode, "meta", item.getValue());
+            metadataItems.remove(item);
+        } else {
+            addNodeData(metaNode, "meta", new SimpleDateFormat("yyyy-MM-dd'T'hh:mm:ss'Z'").format(new Date()));
+        }
         if (book.getAuthor() != null) {
             TagNode creatorNode = new TagNode("dc:creator");
             creatorNode.addChild(new ContentNode(book.getAuthor()));

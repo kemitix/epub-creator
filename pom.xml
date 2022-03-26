@@ -9,9 +9,8 @@
         <relativePath/>
     </parent>
 
-    <groupId>net.kemitix</groupId>
     <artifactId>epub-creator</artifactId>
-    <version>1.1.0</version>
+    <version>1.2.0</version>
     
     <scm>
         <connection>scm:git:git@github.com:kemitix/epub-creator.git</connection>
@@ -27,38 +26,49 @@
 
         <tiles-maven-plugin.version>2.22</tiles-maven-plugin.version>
         <kemitix-tiles.version>2.8.0</kemitix-tiles.version>
+        <assertj.version>3.22.0</assertj.version>
+        <lombok.version>1.18.20</lombok.version>
+        <commons-collections.version>3.2.2</commons-collections.version>
+        <commons-io.version>2.10.0</commons-io.version>
+        <htmlcleaner.version>2.24</htmlcleaner.version>
+        <junit.version>4.13.2</junit.version>
     </properties>
     
     <dependencies>
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
-            <version>4.13.2</version>
+            <version>${junit.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>net.sourceforge.htmlcleaner</groupId>
             <artifactId>htmlcleaner</artifactId>
-            <version>2.24</version>
+            <version>${htmlcleaner.version}</version>
         </dependency>
         <dependency>
             <groupId>commons-io</groupId>
             <artifactId>commons-io</artifactId>
-            <version>2.10.0</version>
+            <version>${commons-io.version}</version>
         </dependency>
         <dependency>
             <groupId>commons-collections</groupId>
             <artifactId>commons-collections</artifactId>
-            <version>3.2.2</version>
+            <version>${commons-collections.version}</version>
         </dependency>
 
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
-            <version>1.18.20</version>
+            <version>${lombok.version}</version>
             <optional>true</optional>
         </dependency>
-
+        <dependency>
+            <groupId>org.assertj</groupId>
+            <artifactId>assertj-core</artifactId>
+            <version>${assertj.version}</version>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
     
     <build>
