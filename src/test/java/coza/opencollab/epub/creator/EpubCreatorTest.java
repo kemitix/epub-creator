@@ -40,6 +40,7 @@ public class EpubCreatorTest implements WithAssertions {
         //when
         String bookOpf = unzipFileEntry(file, "content/book.opf");
         //then
+        assertThat(bookOpf).containsOnlyOnce("<meta property=\"dcterms:modified\">");
         assertThat(bookOpf).contains(String.format("<meta property=\"dcterms:modified\">%s</meta>", modified));
     }
 
