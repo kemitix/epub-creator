@@ -6,10 +6,13 @@ import lombok.SneakyThrows;
 import lombok.val;
 import org.apache.commons.io.IOUtils;
 import org.assertj.core.api.WithAssertions;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.TemporaryFolder;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.OutputStream;
 import java.util.Scanner;
 import java.util.zip.ZipFile;
@@ -19,7 +22,11 @@ import java.util.zip.ZipFile;
  */
 public class EpubCreatorTest implements WithAssertions {
 
-    String author = "Samuel Holtzkampf";
+    @Rule
+    public TemporaryFolder folder = new TemporaryFolder();
+
+    String firstAuthor = "Samuel Holtzkampf";
+    String secondAuthor = "Alison Firkin";
     String modified = "modified-date-and-time";
 
     @Test
@@ -27,21 +34,31 @@ public class EpubCreatorTest implements WithAssertions {
         //when
         val book = createEpubBook();
         //then
-        assertThat(book.getAuthor()).isEqualTo(author);
+        assertThat(book.getAuthor()).isEqualTo(firstAuthor);
 
     }
 
     @Test
-    public void hasSetModifiedValue() {
+    public void hasSetModifiedValue() throws IOException {
         //given
-        //TODO use a proper temp file
-        val file = new File("test.epub");
+        val file = folder.newFile();
         writeBookToFile(createEpubBook(), file);
         //when
         String bookOpf = unzipFileEntry(file, "content/book.opf");
         //then
         assertThat(bookOpf).containsOnlyOnce("<meta property=\"dcterms:modified\">");
         assertThat(bookOpf).contains(String.format("<meta property=\"dcterms:modified\">%s</meta>", modified));
+    }
+
+    @Test
+    public void hasAllAuthorsAsCreators() throws IOException {
+        //given
+        val file = folder.newFile();
+        writeBookToFile(createEpubBook(), file);
+        //when
+        String bookOpf = unzipFileEntry(file, "content/book.opf");
+        assertThat(bookOpf).containsOnlyOnce(String.format("<dc:creator>%s</dc:creator>", firstAuthor));
+        assertThat(bookOpf).containsOnlyOnce(String.format("<dc:creator>%s</dc:creator>", secondAuthor));
     }
 
     @SneakyThrows
@@ -63,10 +80,10 @@ public class EpubCreatorTest implements WithAssertions {
 
     @SneakyThrows
     private EpubBook createEpubBook() {
-        EpubBook book = new EpubBook("en", "Samuel .-__Id1", "Samuel Test Book", author);
+        EpubBook book = new EpubBook("en", "Samuel .-__Id1", "Samuel Test Book", firstAuthor);
 
         MetadataItem.Builder builder = MetadataItem.builder();
-        book.addMetadata(builder.name("dc:creator").value("Bob Smith"));
+        book.addMetadata(builder.name("dc:creator").value(secondAuthor));
         book.addMetadata(builder.name("meta")
                 .property("role").refines("#editor-id")
                 .value("Editor"));
